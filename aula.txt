@@ -1,0 +1,77 @@
+Introdução ao Tkinter
+Tkinter é a biblioteca padrão de interface gráfica do usuário (GUI) para Python. 
+Ela permite a criação de janelas, botões, campos de entrada de texto e outros widgets para criar aplicações interativas.
+===================================================================================================================================================
+Estrutura do Código
+O código começa importando as bibliotecas necessárias: tkinter, messagebox (para exibir mensagens na tela) e pandas (para manipulação de dados).
+
+
+     import tkinter as tk
+     from tkinter import messagebox
+     import pandas as pd
+===================================================================================================================================================
+
+Inicialização da Janela Principal
+A janela principal é criada e configurada com um título e dimensões específicas.
+
+
+   root = tk.Tk()
+   root.title("Sistema de cadastro de alunos")  
+   window_width = int(root.winfo_screenwidth() * 0.5)
+   window_height = int(root.winfo_screenheight() * 0.5)
+   root.geometry(f"{window_width}x{window_height}")
+===================================================================================================================================================
+Criação de Widgets
+Widgets são elementos gráficos que compõem a interface do usuário, como rótulos, botões e campos de entrada. 
+No código, vários widgets são criados para permitir a entrada de dados do aluno e a interação com o sistema.
+
+nome_label = tk.Label(root, text="Nome", font=("Arial", font_size))
+nome_entry = tk.Entry(root, font=("Arial", font_size), width=50)
+...
+add_button = tk.Button(root, text="Adicionar Aluno", command=add_student, font=("Arial", button_font_size), width=button_width, height=button_height)
+
+===================================================================================================================================================
+
+Funções de Manipulação de Dados
+As funções add_student, search_student e delete_student são definidas para manipular os dados dos alunos. 
+Elas usam o DataFrame do pandas para armazenar e manipular os dados, e a biblioteca messagebox para fornecer feedback ao usuário.
+
+def add_student():
+    global df > Esta linha declara que a função irá usar a variável global df, que é um DataFrame do pandas usado para armazenar os dados dos alunos < 
+
+    nome = nome_entry.get()
+    matricula = matricula_entry.get()
+    nota1 = float(nota1_entry.get())  > Estas linhas pegam os valores inseridos nos campos de entrada correspondentes 
+    nota2 = float(nota2_entry.get())    Os métodos .get() são usados para recuperar o texto atualmente inserido nos campos de entrada 
+    nota3 = float(nota3_entry.get())    As notas são convertidas para float <
+
+
+    media = (nota1 + nota2 + nota3) / 3 > cálculo da média que será adicionado na coluna com mesmo nome no arquivo .xlsx <
+
+    new_row = pd.DataFrame({"Nome": [nome], "Matrícula": [matricula], "Nota1": [nota1], "Nota2": [nota2], "Nota3": [nota3], "Média": [media]})
+                >Esta linha cria um novo DataFrame do pandas que contém os dados do aluno que acabou de ser inserido <
+    df = pd.concat([df, new_row], ignore_index=True)
+                > DataFrame df. A opção ignore_index=True é usada para redefinir o índice do DataFrame após a concatenação <
+    df.to_excel("alunos.xlsx", index=False)
+                > Esta linha salva o DataFrame df em um arquivo Excel chamado “alunos.xlsx”. A opção index=False é usada para evitar a escrita do índice do DataFrame no arquivo<
+    messagebox.showinfo("Sucesso", "Aluno adicionado com sucesso!")
+                >Esta linha exibe uma caixa de mensagem informando que o aluno foi adicionado com sucesso <
+
+    nome_entry.delete(0, tk.END)
+    matricula_entry.delete(0, tk.END)           > Estas linhas limpam os campos de entrada para que possam ser preenchidos com novos dados
+    nota1_entry.delete(0, tk.END)                 O método .delete(0, tk.END) é usado para excluir todo o texto atualmente presente no campo de entrada <
+    nota2_entry.delete(0, tk.END)
+    nota3_entry.delete(0, tk.END)
+
+def search_student():
+    ...
+def delete_student():
+    ...
+
+===================================================================================================================================================
+
+Loop Principal
+Finalmente, o loop principal é iniciado com root.mainloop(). 
+Este loop mantém a janela aberta e escuta eventos, como cliques de botão.
+
+root.mainloop()
